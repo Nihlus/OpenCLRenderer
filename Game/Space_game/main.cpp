@@ -12,11 +12,11 @@
 #include <string>
 #include "../../vec.hpp"
 
-#include "../galaxy/galaxy.hpp"
+#include "../Galaxy/galaxy.hpp"
 
 #include "../game_manager.hpp"
 #include "../space_dust.hpp"
-#include "../asteroid/asteroid_gen.hpp"
+#include "../Asteroid/asteroid_gen.hpp"
 #include "../../ui_manager.hpp"
 
 #include "../ship.hpp"
