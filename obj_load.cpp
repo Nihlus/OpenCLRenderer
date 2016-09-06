@@ -1,3 +1,4 @@
+#include "texture.hpp"
 #include "obj_load.hpp"
 #include <cstdio>
 #include <cstdlib>
@@ -7,7 +8,6 @@
 #include <cstdio>
 #include <string.h>
 #include "triangle.hpp"
-#include "texture.hpp"
 #include <math.h>
 #include <list>
 #include "vec.hpp"

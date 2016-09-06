@@ -1,6 +1,6 @@
+#include "texture.hpp"
 #include "object.hpp"
 #include "clstate.h"
-#include "texture.hpp"
 #include "objects_container.hpp"
 #include <iostream>
 #include "vec.hpp"
@@ -551,7 +551,7 @@ bool dynamic_cache(T& data, cache<T>& c, bool force, bool context_switched, int 
 ///yay!
 void object::g_flush(object_context_data& dat, bool force)
 {
-    cl_rot_quat = conv_implicit<cl_float4>(rot_quat);
+	cl_rot_quat = conv_implicit<cl_float4>(rot_quat);
 
     if(!gpu_writable)
         return;

@@ -4,7 +4,7 @@
 #include <vector>
 #include <string>
 
-#include <cl/cl.h>
+#include <CL/cl.h>
 
 #include <map>
 

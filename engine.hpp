@@ -1,9 +1,9 @@
 #ifndef INCLUDED_HPP_ENGINE
 #define INCLUDED_HPP_ENGINE
 
+#include <SFML/Graphics.hpp>
 #include <GL/glew.h>
 
-#include <SFML/Graphics.hpp>
 #include <vector>
 
 #include "object.hpp"

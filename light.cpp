@@ -1,9 +1,9 @@
+#include "engine.hpp"
 #include "light.hpp"
 #include <iostream>
 #include <float.h>
 #include <algorithm>
 #include "clstate.h"
-#include "engine.hpp"
 
 std::vector<light*> light::lightlist;
 std::vector<cl_uint> light::active;

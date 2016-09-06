@@ -1,22 +1,18 @@
 #ifndef OBJECT_CONTEXT_HPP_INCLUDED
 #define OBJECT_CONTEXT_HPP_INCLUDED
 
+#include <SFML/System.hpp>
 #include <CL/cl.h>
-
 #include <GL/glew.h>
-
-#include <boost/compute/system.hpp>
 #include <boost/compute/interop/opengl.hpp>
+#include <boost/compute/system.hpp>
 
 #include <set>
 #include <mutex>
 #include <atomic>
-
-#include "texture_context.hpp"
-
 #include <thread>
 
-#include <SFML/System.hpp>
+#include "texture_context.hpp"
 
 namespace compute = boost::compute;
 

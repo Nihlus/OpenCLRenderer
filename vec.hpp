@@ -1,6 +1,6 @@
 #ifndef INCLUDED_HPP_VEC
 #define INCLUDED_HPP_VEC
-#include <cl/cl.h>
+#include <CL/cl.h>
 #include <math.h>
 #include <algorithm>
 

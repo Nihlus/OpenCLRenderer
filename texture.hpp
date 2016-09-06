@@ -1,8 +1,8 @@
 #ifndef INCLUDED_HPP_TEXTURE
 #define INCLUDED_HPP_TEXTURE
 
-#include <GL/glew.h>
 #include <SFML/Graphics.hpp>
+#include <GL/glew.h>
 #include <CL/cl.h>
 #include <vector>
 #include "obj_g_descriptor.hpp"

@@ -1,11 +1,11 @@
 #ifndef INCLUDED_HPP_OBJECTS_CONTAINER
 #define INCLUDED_HPP_OBJECTS_CONTAINER
 
+#include <boost/compute/system.hpp>
 #include <GL/glew.h>
 
 #include "object.hpp"
 #include <functional>
-#include <boost/compute/system.hpp>
 #include <vec/vec.hpp>
 
 

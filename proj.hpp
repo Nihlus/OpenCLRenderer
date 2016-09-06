@@ -20,10 +20,10 @@ static cl_mem fake;
 #define clCreateFromGLTexture2D(...) fake
 #endif*/
 
+#include "texture.hpp"
 #include "clstate.h"
 #include "obj_load.hpp"
 #include "objects_container.hpp"
-#include "texture.hpp"
 #include "engine.hpp"
 #include "obj_g_descriptor.hpp"
 #include <math.h>

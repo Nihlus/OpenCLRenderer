@@ -3,11 +3,11 @@
 #include <string>
 #include <vector>
 #include <utility>
-#include <gl/glew.h>
-#include <gl/gl.h>
-#include <gl/glext.h>
-#include <sfml/graphics.hpp>
-#include <cl/cl.h>
+#include <GL/glew.h>
+#include <GL/gl.h>
+#include <GL/glext.h>
+#include <SFML/Graphics.hpp>
+#include <CL/cl.h>
 
 
 static GLuint get_texture_from_sfml(sf::Image& img)

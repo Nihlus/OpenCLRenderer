@@ -1,9 +1,9 @@
+#include "texture.hpp"
 #include "objects_container.hpp"
 #include <iostream>
 #include "obj_load.hpp"
 #include "vec.hpp"
 #include "logging.hpp"
-#include "texture.hpp"
 
 cl_uint objects_container::gid = 0;
 std::vector<objects_container*> objects_container::obj_container_list;

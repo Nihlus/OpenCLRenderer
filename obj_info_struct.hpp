@@ -1,6 +1,6 @@
 #ifndef INCLUDED_HPP_OBJ_INFO_STRUCT
 #define INCLUDED_HPP_OBJ_INFO_STRUCT
-#include <cl/cl.h>
+#include <CL/cl.h>
 #include <vector>
 
 /*struct obj_info_struct

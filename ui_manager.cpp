@@ -42,7 +42,8 @@ void ui_element::load(int _ref_id, std::string file, std::string _name, cl_float
 
     GLuint gl_id = get_texture_from_sfml(img);
 
-    g_ui = clCreateFromGLTexture2D(cl::context, CL_MEM_READ_WRITE, GL_TEXTURE_2D, 0, gl_id, NULL);
+    //g_ui = clCreateFromGLTexture2D(cl::context, CL_MEM_READ_WRITE, GL_TEXTURE_2D, 0, gl_id, NULL);
+	g_ui = clCreateFromGLTexture(cl::context, CL_MEM_READ_WRITE, GL_TEXTURE_2D, 0, gl_id, nullptr);
 
     ref_id = _ref_id;
 
@@ -76,7 +77,8 @@ void ship_screen::ship_load(int _ref_id, std::string file, std::string selected_
 
    GLuint gl_id = get_texture_from_sfml(img);
 
-   selected_tex = clCreateFromGLTexture2D(cl::context, CL_MEM_READ_ONLY, GL_TEXTURE_2D, 0, gl_id, NULL);
+    //selected_tex = clCreateFromGLTexture2D(cl::context, CL_MEM_READ_ONLY, GL_TEXTURE_2D, 0, gl_id, NULL);
+	selected_tex = clCreateFromGLTexture(cl::context, CL_MEM_READ_ONLY, GL_TEXTURE_2D, 0, gl_id, nullptr);
 }
 
 void ui_element::update_offset()

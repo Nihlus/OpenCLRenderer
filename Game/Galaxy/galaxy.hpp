@@ -1,7 +1,7 @@
 #ifndef INCLUDED_GALAXY_HPP
 #define INCLUDED_GALAXY_HPP
 
-#include <cl/cl.h>
+#include <CL/cl.h>
 #include "../../point_cloud.hpp"
 
 struct star

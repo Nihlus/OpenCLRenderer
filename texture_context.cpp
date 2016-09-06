@@ -1,9 +1,6 @@
-#include "texture_context.hpp"
-
-#include "object_context.hpp"
-
 #include "texture.hpp"
-
+#include "texture_context.hpp"
+#include "object_context.hpp"
 #include "objects_container.hpp"
 
 //#include "texture_manager.hpp"
