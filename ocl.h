@@ -3,9 +3,9 @@
 #include <cstdio>
 #include <CL/cl.h>
 #include <iostream>
-#include <sfml/graphics.hpp>
+#include <SFML/Graphics.hpp>
 #include "clstate.h"
-#include <windows.h>
+//#include <windows.h>
 
 #include <boost/compute/source.hpp>
 #include <boost/compute/system.hpp>

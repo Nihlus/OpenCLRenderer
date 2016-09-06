@@ -2,9 +2,9 @@
 #define TEXTURE_CONTEXT_HPP_INCLUDED
 
 #include <vector>
-#include <cl/cl.h>
+#include <CL/cl.h>
 
-#include <gl/glew.h>
+#include <GL/glew.h>
 
 #include <boost/compute/source.hpp>
 #include <boost/compute/system.hpp>

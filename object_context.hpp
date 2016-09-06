@@ -1,9 +1,9 @@
 #ifndef OBJECT_CONTEXT_HPP_INCLUDED
 #define OBJECT_CONTEXT_HPP_INCLUDED
 
-#include <cl/cl.h>
+#include <CL/cl.h>
 
-#include <gl/glew.h>
+#include <GL/glew.h>
 
 #include <boost/compute/system.hpp>
 #include <boost/compute/interop/opengl.hpp>

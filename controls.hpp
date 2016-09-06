@@ -2,7 +2,7 @@
 #define CONTROLS_HPP_INCLUDED
 
 #include <SFML/Graphics.hpp>
-#include <cl/cl.h>
+#include <CL/cl.h>
 #include <functional>
 
 struct engine;

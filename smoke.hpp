@@ -1,6 +1,6 @@
 #pragma once
 
-#include <gl/glew.h>
+#include <GL/glew.h>
 
 ///start moving away from proj.hpp for non self-project includes and base
 #include <boost/compute/source.hpp>

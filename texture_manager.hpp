@@ -4,7 +4,7 @@
 ///owns every texture
 
 #include <vector>
-#include <gl/glew.h>
+#include <GL/glew.h>
 #include "texture.hpp"
 
 #include <boost/compute/source.hpp>

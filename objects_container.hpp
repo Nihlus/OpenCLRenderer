@@ -1,7 +1,7 @@
 #ifndef INCLUDED_HPP_OBJECTS_CONTAINER
 #define INCLUDED_HPP_OBJECTS_CONTAINER
 
-#include <gl/glew.h>
+#include <GL/glew.h>
 
 #include "object.hpp"
 #include <functional>

@@ -5,15 +5,15 @@
 #include <string>
 #include <iostream>
 
-#include <gl/glew.h>
+#include <GL/glew.h>
 
-#include <windows.h>
+//#include <windows.h>
 
-#include <gl/gl.h>
-#include <gl/glext.h>
+#include <GL/gl.h>
+#include <GL/glext.h>
 
 
-#include <cl/cl.h>
+#include <CL/cl.h>
 
 /*#ifndef CL_USE_DEPRECATED_OPENCL_1_1_APIS
 static cl_mem fake;

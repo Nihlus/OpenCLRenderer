@@ -1,7 +1,7 @@
 #ifndef INCLUDED_LIGHT_HPP
 #define INCLUDED_LIGHT_HPP
 
-#include <cl/cl.h>
+#include <CL/cl.h>
 #include <vector>
 
 #include <boost/compute/system.hpp>
