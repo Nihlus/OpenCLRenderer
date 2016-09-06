@@ -1474,3 +1474,4 @@ rel/bin/libgcc_s_dw2-1.dll
 rel/bin/libssp-0.dll
 rel/bin/libstdc++-6.dll
 rel/cl2.cl
+.idea/
