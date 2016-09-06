@@ -73,8 +73,11 @@ int hologram_manager::load(std::string file, cl_float4 _pos, cl_float4 _rot, flo
     printf("ID: %i\n", texture_handle); ///
     printf("ID: %i\n", texture_handle_base); ///
 
-    cl_mem mem_base = clCreateFromGLTexture2D(cl::context, CL_MEM_READ_WRITE, GL_TEXTURE_2D, 0, texture_handle_base, NULL);
-    cl_mem mem =      clCreateFromGLTexture2D(cl::context, CL_MEM_READ_WRITE, GL_TEXTURE_2D, 0, texture_handle, NULL);
+    //cl_mem mem_base = clCreateFromGLTexture2D(cl::context, CL_MEM_READ_WRITE, GL_TEXTURE_2D, 0, texture_handle_base, NULL);
+    //cl_mem mem =      clCreateFromGLTexture2D(cl::context, CL_MEM_READ_WRITE, GL_TEXTURE_2D, 0, texture_handle, NULL);
+
+	cl_mem mem_base = clCreateFromGLTexture(cl::context, CL_MEM_READ_WRITE, GL_TEXTURE_2D, 0, texture_handle_base, nullptr);
+	cl_mem mem = clCreateFromGLTexture(cl::context, CL_MEM_READ_WRITE, GL_TEXTURE_2D, 0, texture_handle, nullptr);
 
     cl_mem g_pos = clCreateBuffer(cl::context, CL_MEM_COPY_HOST_PTR | CL_MEM_READ_ONLY, sizeof(cl_float4), &_pos, NULL);
     cl_mem g_rot = clCreateBuffer(cl::context, CL_MEM_COPY_HOST_PTR | CL_MEM_READ_ONLY, sizeof(cl_float4), &_rot, NULL);

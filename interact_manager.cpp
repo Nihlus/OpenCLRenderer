@@ -1,5 +1,5 @@
-#include "interact_manager.hpp"
 #include <SFML/Graphics.hpp>
+#include "interact_manager.hpp"
 #include "engine.hpp"
 #include <utility>
 
