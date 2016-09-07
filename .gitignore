@@ -10,9 +10,7 @@
 *.depend
 *.layout
 gmon.out
-bin/Release/libstdc++-6.dll
-bin/Release/libgcc_s_dw2-1.dll
-bin/Release/cl2.cl
+bin/
 Leap/bin/cl2.cl
 Leap/LeapSDK/util/LeapUtilGL.h
 Leap/LeapSDK/util/LeapUtilGL.cpp
