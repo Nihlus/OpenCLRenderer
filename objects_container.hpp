@@ -3,10 +3,9 @@
 
 #include <boost/compute/system.hpp>
 #include <GL/glew.h>
-
-#include "object.hpp"
 #include <functional>
 #include <vec/vec.hpp>
+#include "object.hpp"
 
 
 namespace compute = boost::compute;

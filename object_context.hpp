@@ -4,15 +4,14 @@
 #include <SFML/System.hpp>
 #include <CL/cl.h>
 #include <GL/glew.h>
-#include <boost/compute/interop/opengl.hpp>
-#include <boost/compute/system.hpp>
-
 #include <set>
 #include <mutex>
 #include <atomic>
 #include <thread>
-
 #include "texture_context.hpp"
+
+#include <boost/compute/interop/opengl.hpp>
+#include <boost/compute/system.hpp>
 
 namespace compute = boost::compute;
 
