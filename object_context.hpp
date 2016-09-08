@@ -10,6 +10,8 @@
 #include <thread>
 #include "texture_context.hpp"
 
+#include <SFML/System.hpp>
+#include "cl_gl_interop_texture.hpp"
 #include <boost/compute/interop/opengl.hpp>
 #include <boost/compute/system.hpp>
 
@@ -44,7 +46,8 @@ struct object_context_data
     compute::buffer g_tid_buf_atomic_count;
     compute::buffer g_tid_lightbuf_atomic_count;
 
-    compute::opengl_renderbuffer g_screen;
+    cl_gl_interop_texture gl_screen;
+    //compute::opengl_renderbuffer g_screen;
     compute::buffer depth_buffer[2];
     compute::image2d g_id_screen_tex;
 

@@ -17,6 +17,7 @@ find_package(Threads)
 find_package(SFML 2 REQUIRED system window graphics)
 
 set(PFIX_SOURCES
+		${PROJECT_SOURCE_DIR}/cl_gl_interop_texture.cpp
 		${PROJECT_SOURCE_DIR}/clstate.cpp
 		${PROJECT_SOURCE_DIR}/controls.cpp
 		${PROJECT_SOURCE_DIR}/engine.cpp
@@ -40,6 +41,7 @@ set(PFIX_SOURCES
 		${PROJECT_SOURCE_DIR}/vertex.cpp)
 
 set(PFIX_HEADERS
+		${PROJECT_SOURCE_DIR}/cl_gl_interop_texture.hpp
 		${PROJECT_SOURCE_DIR}/clstate.h
 		${PROJECT_SOURCE_DIR}/controls.hpp
 		${PROJECT_SOURCE_DIR}/engine.hpp

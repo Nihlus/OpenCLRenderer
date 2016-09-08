@@ -33,6 +33,8 @@
 
 #define FOV_CONST 500.0f
 
+#include "cl_gl_interop_texture.hpp"
+
 bool rift::enabled = false;
 
 ///rift
@@ -138,7 +140,7 @@ compute::opengl_renderbuffer engine::gen_cl_gl_framebuffer_renderbuffer(GLuint* 
     glBindRenderbufferEXT(GL_RENDERBUFFER, screen_id);
 
     ///generate storage for renderbuffer
-    glRenderbufferStorageEXT(GL_RENDERBUFFER, GL_RGBA, w, h);
+    glRenderbufferStorageEXT(GL_RENDERBUFFER, GL_RGBA8, w, h);
 
     GLuint framebuf;
 
@@ -1131,10 +1133,12 @@ compute::event engine::draw_godrays(object_context_data& dat)
 
     dat.ensure_screen_buffers(width, height);
 
+    cl_mem g_screen = dat.gl_screen.get();
+
     arg_list args;
     args.push_back(&dat.depth_buffer[dat.nbuf]);
-    args.push_back(&dat.g_screen);
-    args.push_back(&dat.g_screen);
+    args.push_back(&g_screen);
+    args.push_back(&g_screen);
     args.push_back(&light_data->g_light_num);
     args.push_back(&light_data->g_light_mem);
     args.push_back(&c_pos);
@@ -1284,7 +1288,7 @@ compute::event engine::generate_realtime_shadowing(object_context_data& dat)
 
 ///the beginnings of making rendering more configurable
 ///reduce arguments to what we actually need now
-compute::event render_tris(engine& eng, cl_float4 position, cl_float4 rotation, compute::opengl_renderbuffer& g_screen_out, object_context_data& dat)
+compute::event render_tris(engine& eng, cl_float4 position, cl_float4 rotation, cl_gl_interop_texture& g_screen_out, object_context_data& dat)
 {
     eng.last_frametype = frametype::RENDER;
 
@@ -1342,8 +1346,8 @@ compute::event render_tris(engine& eng, cl_float4 position, cl_float4 rotation, 
 
     register_automatic(&dat.g_id_screen_tex, "id_buffer");
     register_automatic(&eng.g_tid_buf, "fragment_id_buffer");
-    register_automatic(&g_screen_out, "screen");
-    register_automatic(&g_screen_out, "in_screen");
+    register_automatic(g_screen_out.get_ptr(), "screen");
+    register_automatic(g_screen_out.get_ptr(), "in_screen");
     register_automatic(&dat.g_cut_tri_mem, "cutdown_tris");
     register_automatic(&dat.depth_buffer[dat.nbuf], "depth_buffer");
 
@@ -1434,7 +1438,7 @@ compute::event render_tris(engine& eng, cl_float4 position, cl_float4 rotation, 
     p3arg_list.push_back(&dat.depth_buffer[dat.nbuf]);
     p3arg_list.push_back(&dat.g_id_screen_tex);
     p3arg_list.push_back(&dat.tex_gpu_ctx.g_texture_array);
-    p3arg_list.push_back(&g_screen_out);
+    p3arg_list.push_back(g_screen_out.get_ptr());
     p3arg_list.push_back(&dat.tex_gpu_ctx.g_texture_nums);
     p3arg_list.push_back(&dat.tex_gpu_ctx.g_texture_sizes);
     p3arg_list.push_back(&dat.g_obj_desc);
@@ -1843,7 +1847,7 @@ compute::event engine::draw_bulk_objs_n(object_context_data& dat)
         {
         #endif // USE_REPROJECTION
 
-            ret = render_tris(*this, pos_offset, rot_offset, dat.g_screen, dat);
+            ret = render_tris(*this, pos_offset, rot_offset, dat.gl_screen, dat);
             //swap_depth_buffers();
 
         #ifdef USE_REPROJECTION
@@ -1925,7 +1929,7 @@ compute::event engine::draw_tiled_deferred(object_context_data& dat)
     ret = run_kernel_with_string("clear_depth_buffer", {dat.s_w, dat.s_h}, {8, 8}, 2, clear_depth);
 
     arg_list clear_screen;
-    clear_screen.push_back(&dat.g_screen);
+    clear_screen.push_back(&dat.gl_screen.get());
 
     ret = run_kernel_with_string("clear_screen_tex", {dat.s_w, dat.s_h}, {8, 8}, 2, clear_depth);
 
@@ -1956,7 +1960,7 @@ compute::event engine::draw_tiled_deferred(object_context_data& dat)
 
     arg_list render_args = split_args;
     render_args.push_back(&dat.depth_buffer[dat.nbuf]);
-    render_args.push_back(&dat.g_screen);
+    render_args.push_back(&dat.gl_screen.get());
 
     ///gws is temp
     ret = run_kernel_with_string("tile_render", {256 * tile_num_w * tile_num_h}, {256}, 1, render_args);
@@ -1964,7 +1968,7 @@ compute::event engine::draw_tiled_deferred(object_context_data& dat)
     arg_list depth_render_args;
 
     depth_render_args.push_back(&dat.depth_buffer[dat.nbuf]);
-    depth_render_args.push_back(&dat.g_screen);
+    depth_render_args.push_back(&dat.gl_screen.get());
 
     ret = run_kernel_with_string("render_depth_buffer", {width * height}, {256}, 1, depth_render_args);
 
@@ -1988,9 +1992,9 @@ compute::event engine::blend(object_context_data& src, object_context_data& dst)
     cl_int2 dim = {dst.s_w, dst.s_h};
 
     arg_list args;
-    args.push_back(&src.g_screen);
-    args.push_back(&dst.g_screen);
-    args.push_back(&dst.g_screen);
+    args.push_back(&src.gl_screen.get());
+    args.push_back(&dst.gl_screen.get());
+    args.push_back(&dst.gl_screen.get());
     args.push_back(&dim);
 
     return run_kernel_with_string("blend_screens", {dim.x*dim.y}, {128}, 1, args);
@@ -2003,9 +2007,9 @@ compute::event engine::blend_with_depth(object_context_data& src, object_context
     arg_list args;
     //args.push_back(&src.)
 
-    args.push_back(&src.g_screen);
-    args.push_back(&dst.g_screen);
-    args.push_back(&dst.g_screen);
+    args.push_back(&src.gl_screen.get());
+    args.push_back(&dst.gl_screen.get());
+    args.push_back(&dst.gl_screen.get());
 
     args.push_back(&src.depth_buffer[src.nbuf]);
     args.push_back(&dst.depth_buffer[dst.nbuf]);
@@ -2458,8 +2462,8 @@ compute::event engine::draw_smoke(object_context_data& dat, smoke& s, cl_int sol
     smoke_args.push_back(&c_rot);
     smoke_args.push_back(&s.pos);
     smoke_args.push_back(&s.rot);
-    smoke_args.push_back(&dat.g_screen); ///trolol undefined behaviour
-    smoke_args.push_back(&dat.g_screen);
+    smoke_args.push_back(&dat.gl_screen.get()); ///trolol undefined behaviour
+    smoke_args.push_back(&dat.gl_screen.get());
     smoke_args.push_back(&dat.depth_buffer[dat.nbuf]);
     smoke_args.push_back(&offset);
     smoke_args.push_back(wcorners, sizeof(wcorners)); ///?
@@ -2684,8 +2688,8 @@ compute::event engine::draw_smoke_as_fire(object_context_data& dat, smoke& s, cl
     smoke_args.push_back(&c_rot);
     smoke_args.push_back(&s.pos);
     smoke_args.push_back(&s.rot);
-    smoke_args.push_back(&dat.g_screen); ///trolol undefined behaviour
-    smoke_args.push_back(&dat.g_screen);
+    smoke_args.push_back(&dat.gl_screen.get()); ///trolol undefined behaviour
+    smoke_args.push_back(&dat.gl_screen.get());
     smoke_args.push_back(&dat.depth_buffer[dat.nbuf]);
     smoke_args.push_back(&offset);
     smoke_args.push_back(wcorners, sizeof(wcorners)); ///?
@@ -2755,8 +2759,8 @@ compute::event engine::draw_smoke_dbuf(object_context_data& dat, smoke& s)
     arg_list args;
     args.push_back(&s.g_voxel_upscale);
     args.push_back(&udim);
-    args.push_back(&dat.g_screen);
-    args.push_back(&dat.g_screen);
+    args.push_back(&dat.gl_screen.get());
+    args.push_back(&dat.gl_screen.get());
     args.push_back(&dat.depth_buffer[dat.nbuf]);
     args.push_back(&this->c_pos);
     args.push_back(&this->c_rot);
@@ -3059,7 +3063,7 @@ void render_screen(engine& eng, object_context_data& dat)
     ///I'm sticking this in the queue but.. how do opencl and opengl queues interact?
     ///this is not THE screen, its A screen
     ///therefore we don't need to worry about text rendering while its acquired etc
-    compute::opengl_enqueue_release_gl_objects(1, &dat.g_screen.get(), cl::cqueue);
+    /*compute::opengl_enqueue_release_gl_objects(1, &dat.g_screen.get(), cl::cqueue);
 
     glBindFramebufferEXT(GL_READ_FRAMEBUFFER, dat.gl_framebuffer_id);
 
@@ -3068,7 +3072,26 @@ void render_screen(engine& eng, object_context_data& dat)
     ///blit buffer to screen
     glBlitFramebufferEXT(0, 0, eng.width, eng.height, 0, 0, eng.width, eng.height, GL_COLOR_BUFFER_BIT, GL_NEAREST);
 
-    compute::opengl_enqueue_acquire_gl_objects(1, &dat.g_screen.get(), cl::cqueue);
+    compute::opengl_enqueue_acquire_gl_objects(1, &dat.g_screen.get(), cl::cqueue);*/
+
+    if(!use_gl_interop())
+    {
+        dat.gl_screen.blit_to_opengl(0, cl::cqueue, true);
+
+        sf::Sprite spr;
+        spr.setTexture(dat.gl_screen.sfml_nogl_tex);
+        spr.setTextureRect(sf::IntRect(0, dat.gl_screen.h, dat.gl_screen.w, -dat.gl_screen.h));
+
+        ///If this isn't here, it doesn't work. I literally dont understand why
+        glBindFramebufferEXT(GL_DRAW_FRAMEBUFFER, 0);
+
+        eng.window.draw(spr);
+    }
+    else
+    {
+        ///could we acquire and release on a diff queue?
+        dat.gl_screen.blit_to_opengl(0, cl::cqueue, true);
+    }
 }
 
 void engine::flip()
@@ -3175,7 +3198,7 @@ void engine::clear_screen(object_context_data& dat)
     dat.ensure_screen_buffers(width, height);
 
     arg_list args;
-    args.push_back(&dat.g_screen);
+    args.push_back(&dat.gl_screen.get());
 
     run_kernel_with_string("clear_screen_tex", {dat.s_w, dat.s_h}, {16, 16}, 2, args);
 }
@@ -3330,6 +3353,20 @@ void engine::set_opencl_extra_command_line(const std::string& str)
 void engine::append_opencl_extra_command_line(const std::string& str)
 {
     opencl_extra_command_line = opencl_extra_command_line + " " + str;
+}
+
+bool supports_gl_interop()
+{
+    return supports_extension("cl_khr_gl_sharing");
+}
+
+bool use_gl_interop()
+{
+    ///return supports_gl_interop();
+
+    ///so here begins an adventure
+    return supports_gl_interop();
+    //return false;
 }
 
 bool can_write_3d_textures()
