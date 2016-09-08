@@ -1,7 +1,25 @@
 #include "network.hpp"
-#define _WIN32_WINNT 0x601
 
+#if defined(WIN32)
+#define _WIN32_WINNT 0x601
 #include <ws2tcpip.h>
+#elif defined(__linux__)
+#include <sys/types.h>
+#include <errno.h>
+#include <sys/socket.h>
+#include <sys/ioctl.h>
+#include <sys/fcntl.h>
+#include <netdb.h>
+#include <netinet/in.h>
+#include <netinet/tcp.h>
+#include <arpa/inet.h>
+#include <unistd.h>
+#include <string.h>
+#include <stdio.h>
+#define UINT32 uint32_t
+#define INVALID_SOCKET -1
+#endif
+
 #include <iostream>
 #include <sstream>
 #include <memory>
@@ -156,6 +174,7 @@ void network::host()
 {
     std::string port = "6950";
 
+#if defined(WIN32)
     WSADATA wsaData;
 
     if (WSAStartup(MAKEWORD(2,2), &wsaData) != 0)
@@ -163,6 +182,7 @@ void network::host()
         fprintf(stderr, "WSAStartup failed\n");
         exit(1);
     }
+#endif
 
     int sockfd;
     struct addrinfo hints, *servinfo, *p;
@@ -194,7 +214,11 @@ void network::host()
 
         if(bind(sockfd, p->ai_addr, p->ai_addrlen) != 0)
         {
+#if defined(WIN32)
             closesocket(sockfd);
+#elif defined(__linux__)
+			close(sockfd);
+#endif
             perror("listener: bind");
 
             continue;
@@ -221,13 +245,16 @@ void network::join(std::string ip)
 {
     std::string port = "6950";
 
-    WSADATA wsaData;
+#if defined(WIN32)
+
+	WSADATA wsaData;
 
     if (WSAStartup(MAKEWORD(2,2), &wsaData) != 0)
     {
         fprintf(stderr, "WSAStartup failed.\n");
         exit(1);
     }
+#endif
 
     int sockfd;
     struct addrinfo hints, *servinfo, *p;
@@ -406,12 +433,12 @@ std::vector<char> network::receive_any(int& ret_address)
 
     recv_buffer.resize(l);
 
-    int len = 0;
+    ssize_t len = 0;
 
     if(network_state == 2)
     {
         struct sockaddr_storage their_addr;
-        int fromlen = sizeof(sockaddr_storage);
+        socklen_t fromlen = sizeof(sockaddr_storage);
 
         len = recvfrom(socket_descriptor, &recv_buffer[0], l*sizeof(char), 0, (sockaddr*)&their_addr, &fromlen);
 
@@ -421,7 +448,7 @@ std::vector<char> network::receive_any(int& ret_address)
     if(network_state == 1)
     {
         struct sockaddr_storage* their_addr = new sockaddr_storage;
-        int fromlen = sizeof(sockaddr_storage);
+        socklen_t fromlen = sizeof(sockaddr_storage);
 
         len = recvfrom(socket_descriptor, &recv_buffer[0], l*sizeof(char), 0, (sockaddr*)their_addr, &fromlen);
 
@@ -461,7 +488,11 @@ std::vector<char> network::receive_any(int& ret_address)
 
     if(len == -1)
     {
+#if defined(WIN32)
         printf("%i\n", WSAGetLastError());
+#elif defined(__linux__)
+	    printf("&i\n", errno);
+#endif
     }
 
     if(len < 0)

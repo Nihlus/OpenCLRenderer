@@ -12,10 +12,7 @@
 #include "clstate.h"
 #include "SVO/voxel.h"
 
-#include <boost/compute/source.hpp>
-#include <boost/compute/system.hpp>
-#include <boost/compute/algorithm/iota.hpp>
-#include <boost/compute/interop/opengl.hpp>
+
 
 #include <initializer_list>
 #include <unordered_map>
@@ -34,6 +31,10 @@
 #include <atomic>
 
 #include "texture_context.hpp"
+#include <boost/compute/source.hpp>
+#include <boost/compute/system.hpp>
+#include <boost/compute/algorithm/iota.hpp>
+#include <boost/compute/interop/opengl.hpp>
 
 #ifdef RIFT
 #include "Rift/Include/OVR.h"

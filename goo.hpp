@@ -1,8 +1,8 @@
 #ifndef GOO_HPP_INCLUDED
 #define GOO_HPP_INCLUDED
 
-#include "smoke.hpp"
 #include "engine.hpp"
+#include "smoke.hpp"
 
 struct goo : smoke
 {

@@ -1,9 +1,9 @@
 #include <iostream>
-#include <sfml/graphics.hpp>
+#include <SFML/Graphics.hpp>
 #include <math.h>
 #include <stdio.h>
 #include <algorithm>
-#include <cl/cl.h>
+#include <CL/cl.h>
 
 #include "galaxy.hpp"
 #include "../../vec.hpp"

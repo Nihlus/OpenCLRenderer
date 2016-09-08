@@ -1,5 +1,5 @@
-#include "space_manager.hpp"
 #include "../engine.hpp"
+#include "space_manager.hpp"
 #include "../object_context.hpp"
 
 void space_manager::init(int _width, int _height)
