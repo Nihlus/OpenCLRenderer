@@ -430,16 +430,21 @@ inline void oclstuff(const std::string& file, int w, int h, int lres, bool only_
     // Device
     error = clGetDeviceIDs(platform, CL_DEVICE_TYPE_GPU, 1, device, &num);
 
-    lg::log("Found ", num, " devices");
-
     if(error != CL_SUCCESS)
     {
         lg::log("Error getting device ids: ", error);
+
+	    if (error == CL_DEVICE_NOT_FOUND)
+	    {
+		    lg::log("A valid OpenCL device could not be found (error CL_DEVICE_NOT_FOUND).");
+	    }
+
         exit(error);
     }
     else
     {
         lg::log("Got device ids");
+	    lg::log("Found ", num, " devices");
     }
 
 
