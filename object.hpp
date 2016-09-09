@@ -1,15 +1,14 @@
 #ifndef INCLUDED_HPP_OBJECT
 #define INCLUDED_HPP_OBJECT
 
+#include "triangle.hpp"
+#include "object_context.hpp"
 #include <vector>
 #include <string>
 #include <CL/cl.h>
 #include <functional>
 #include <vec/vec.hpp>
 #include "obj_g_descriptor.hpp"
-#include "triangle.hpp"
-#include "object_context.hpp"
-
 
 struct texture;
 

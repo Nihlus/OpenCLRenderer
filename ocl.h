@@ -330,20 +330,6 @@ inline void oclstuff(const std::string& file, int w, int h, int lres, bool only_
         lg::log("Got platform IDs");
     }
 
-    ///this is essentially black magic
-	cl_context_properties props[] = {
-			CL_CONTEXT_PLATFORM, (cl_context_properties) platform,
-			#if defined(__linux__)
-				CL_GL_CONTEXT_KHR, (cl_context_properties) glXGetCurrentContext(),
-				CL_GLX_DISPLAY_KHR, (cl_context_properties) glXGetCurrentDisplay(),
-			#elif defined(WIN32)
-				CL_GL_CONTEXT_KHR, (cl_context_properties) wglGetCurrentContext(),
-	            CL_WGL_HDC_KHR, (cl_context_properties) wglGetCurrentDC(),
-			#endif
-			0
-	};
-
-
     cl_uint num;
 
     cl_device_id device[100];
@@ -372,6 +358,18 @@ inline void oclstuff(const std::string& file, int w, int h, int lres, bool only_
 	    lg::log("Found ", num, " devices");
     }
 
+///this is essentially black magic
+	cl_context_properties props[] = {
+#if defined(__linux__)
+			CL_GL_CONTEXT_KHR, (cl_context_properties) glXGetCurrentContext(),
+			CL_GLX_DISPLAY_KHR, (cl_context_properties) glXGetCurrentDisplay(),
+#elif defined(WIN32)
+			CL_GL_CONTEXT_KHR, (cl_context_properties) wglGetCurrentContext(),
+	        CL_WGL_HDC_KHR, (cl_context_properties) wglGetCurrentDC(),
+#endif
+			CL_CONTEXT_PLATFORM, (cl_context_properties) platform,
+			0
+	};
 
 
     ///I think the context is invalid
@@ -520,6 +518,7 @@ inline void oclstuff(const std::string& file, int w, int h, int lres, bool only_
     lg::log("Created command queue");
 
     build_thread = std::thread(build, file, w, h, lres, only_3d, extra_build_commands);
+    //build_thread.join();
 
     //build(file, w, h, lres, only_3d, extra_build_commands);
 }

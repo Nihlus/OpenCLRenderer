@@ -2,6 +2,7 @@
 #define OBJECT_CONTEXT_HPP_INCLUDED
 
 #include <SFML/System.hpp>
+#include "cl_gl_interop_texture.hpp"
 #include <CL/cl.h>
 #include <GL/glew.h>
 #include <set>
@@ -10,8 +11,6 @@
 #include <thread>
 #include "texture_context.hpp"
 
-#include <SFML/System.hpp>
-#include "cl_gl_interop_texture.hpp"
 #include <boost/compute/interop/opengl.hpp>
 #include <boost/compute/system.hpp>
 
