@@ -33,9 +33,9 @@ bool supports_extension(const std::string& ext_name);
 
 struct driver_blacklist_info
 {
-    std::string friendly_name;
-    std::string driver_name;
-    std::string vendor;
+    std::string friendly_name = "";
+    std::string driver_name = "";
+    std::string vendor = "";
 
     int is_blacklisted = 0;
 
@@ -162,140 +162,147 @@ inline void build(const std::string& file, int w, int h, int lres, bool only_3d,
 
     source = file_contents(file.c_str(), &src_size);
 
-    parsed_automatic_arguments = parse_automatic_arguments(source);
+	if (source != nullptr)
+	{
+		parsed_automatic_arguments = parse_automatic_arguments(source);
 
-    lg::log("Loaded file");
+		lg::log("Loaded file");
 
-    compute::program program = compute::program::create_with_source(source, cl::context);
+		compute::program program = compute::program::create_with_source(source, cl::context);
 
-    free(source);
+		free(source);
 
-    lg::log("Created program");
+		lg::log("Created program");
 
-    std::ostringstream convert;
+		std::ostringstream convert;
 
-    convert << w;
+		convert << w;
 
-    std::string wstr = convert.str();
+		std::string wstr = convert.str();
 
-    std::ostringstream converth;
+		std::ostringstream converth;
 
-    converth << h;
+		converth << h;
 
-    std::string hstr = converth.str();
+		std::string hstr = converth.str();
 
-    std::ostringstream convertlres;
+		std::ostringstream convertlres;
 
-    convertlres << lres;
+		convertlres << lres;
 
-    std::string lresstr = convertlres.str();
+		std::string lresstr = convertlres.str();
 
-    std::string pure_3d;
+		std::string pure_3d;
 
-    if(only_3d)
-        pure_3d = " -D fONLY_3D";
+		if(only_3d)
+			pure_3d = " -D fONLY_3D";
 
 
-    ///does not compile properly without (breaks texture filtering), investigate this at some point
-    std::string buildoptions = "-cl-fast-relaxed-math -cl-no-signed-zeros -cl-single-precision-constant -cl-denorms-are-zero -D SCREENWIDTH=" + wstr + " -D SCREENHEIGHT=" + hstr + " -D LIGHTBUFFERDIM=" + lresstr + pure_3d;// + " -D BECKY_HACK=" + sbecky;
+		///does not compile properly without (breaks texture filtering), investigate this at some point
+		std::string buildoptions = "-cl-fast-relaxed-math -cl-no-signed-zeros -cl-single-precision-constant -cl-denorms-are-zero -D SCREENWIDTH=" + wstr + " -D SCREENHEIGHT=" + hstr + " -D LIGHTBUFFERDIM=" + lresstr + pure_3d;// + " -D BECKY_HACK=" + sbecky;
 
-    if(use_3d_texture_array())
-    {
-        buildoptions = buildoptions + " -D supports_3d_writes";
-    }
+		if(use_3d_texture_array())
+		{
+			buildoptions = buildoptions + " -D supports_3d_writes";
+		}
 
-    buildoptions = buildoptions + " -D SHADOWBIAS=50";
+		buildoptions = buildoptions + " -D SHADOWBIAS=50";
 
-    buildoptions = buildoptions + " " + extra_build_commands;
+		buildoptions = buildoptions + " " + extra_build_commands;
 
-    #ifdef BECKY_HACK
-    buildoptions = buildoptions + std::string(" -D BECKY_HACK=1");
-    #endif
+#ifdef BECKY_HACK
+		buildoptions = buildoptions + std::string(" -D BECKY_HACK=1");
+#endif
 
-    try
-    {
-        program.build(buildoptions.c_str());
-    }
-    catch(...)
-    {
-        lg::log(program.build_log());
+		try
+		{
+			program.build(buildoptions.c_str());
+		}
+		catch(...)
+		{
+			lg::log(program.build_log());
 
-        exit(1232345);
-    }
+			exit(1232345);
+		}
 
-    lg::log("Built program");
+		lg::log("Built program");
 
-    cl::program = program;
+		cl::program = program;
 
-    ///make this more automatic
-    ///calling load kernel in this thread recurses rather a lot, tis a silly place
-    /*cl::kernel1 = load_kernel(program, "kernel1");
-    cl::kernel2 = load_kernel(program, "kernel2");
-    cl::kernel3 = load_kernel(program, "kernel3");
-    cl::prearrange = load_kernel(program, "prearrange");
-    cl::prearrange_light = load_kernel(program, "prearrange_light");
-    cl::kernel1_light = load_kernel(program, "kernel1_light");
+		///make this more automatic
+		///calling load kernel in this thread recurses rather a lot, tis a silly place
+		/*cl::kernel1 = load_kernel(program, "kernel1");
+		cl::kernel2 = load_kernel(program, "kernel2");
+		cl::kernel3 = load_kernel(program, "kernel3");
+		cl::prearrange = load_kernel(program, "prearrange");
+		cl::prearrange_light = load_kernel(program, "prearrange_light");
+		cl::kernel1_light = load_kernel(program, "kernel1_light");
 
-    cl::clear_screen_buffer = load_kernel(program, "clear_screen_buffer");*/
+		cl::clear_screen_buffer = load_kernel(program, "clear_screen_buffer");*/
 
-    #ifdef OCULUS
-    cl::kernel1_oculus = load_kernel(program, "kernel1_oculus");
+#ifdef OCULUS
+		cl::kernel1_oculus = load_kernel(program, "kernel1_oculus");
     cl::kernel2_oculus= load_kernel(program, "kernel2_oculus");
     cl::kernel3_oculus = load_kernel(program, "kernel3_oculus");
     cl::prearrange_oculus = load_kernel(program, "prearrange_oculus");
-    #endif
+#endif
 
-    //cl::cloth_simulate = load_kernel(program, "cloth_simulate");
+		//cl::cloth_simulate = load_kernel(program, "cloth_simulate");
 
-    /*if(!only_3d)
-    {
-        cl::tile_clear = load_kernel(program, "tile_clear");
-        cl::point_cloud_depth = load_kernel(program, "point_cloud_depth_pass");
-        cl::point_cloud_recover = load_kernel(program, "point_cloud_recovery_pass");
-        cl::space_dust = load_kernel(program, "space_dust");
-        cl::space_dust_no_tile = load_kernel(program, "space_dust_no_tiling");
-        cl::draw_ui = load_kernel(program, "draw_ui");
-        cl::draw_hologram = load_kernel(program, "draw_hologram");
-        cl::blit_with_id = load_kernel(program, "blit_with_id");
-        cl::blit_clear = load_kernel(program, "blit_clear");
-        cl::clear_id_buf = load_kernel(program, "clear_id_buf");
-        cl::clear_screen_dbuf = load_kernel(program, "clear_screen_dbuf");
-        cl::draw_voxel_octree = load_kernel(program, "draw_voxel_octree");
-        cl::create_distortion_offset = load_kernel(program, "create_distortion_offset");
-        cl::draw_fancy_projectile = load_kernel(program, "draw_fancy_projectile");
-        cl::reproject_depth = load_kernel(program, "reproject_depth");
-        cl::reproject_screen = load_kernel(program, "reproject_screen");
-        cl::space_nebulae = load_kernel(program, "space_nebulae");
-        cl::edge_smoothing = load_kernel(program, "edge_smoothing");
-        cl::shadowmap_smoothing_x = load_kernel(program, "shadowmap_smoothing_x");
-        cl::shadowmap_smoothing_y = load_kernel(program, "shadowmap_smoothing_y");
-        cl::raytrace = load_kernel(program, "raytrace");
-        cl::render_voxels = load_kernel(program, "render_voxels");
-        cl::render_voxels_tex = load_kernel(program, "render_voxels_tex");
-        cl::render_voxel_cube = load_kernel(program, "render_voxel_cube");
-        cl::diffuse_unstable = load_kernel(program, "diffuse_unstable");
-        cl::diffuse_unstable_tex = load_kernel(program, "diffuse_unstable_tex");
-        cl::advect = load_kernel(program, "advect");
-        cl::advect_tex = load_kernel(program, "advect_tex");
-        cl::post_upscale = load_kernel(program, "post_upscale");
-        cl::warp_oculus = load_kernel(program, "warp_oculus");
-        cl::goo_diffuse = load_kernel(program, "goo_diffuse");
-        cl::goo_advect = load_kernel(program, "goo_advect");
-        cl::fluid_amount = load_kernel(program, "fluid_amount");
-        cl::update_boundary = load_kernel(program, "update_boundary");
-        cl::fluid_initialise_mem = load_kernel(program, "fluid_initialise_mem");
-        cl::fluid_initialise_mem_3d = load_kernel(program, "fluid_initialise_mem_3d");
-        cl::fluid_timestep = load_kernel(program, "fluid_timestep");
-        cl::fluid_timestep_3d = load_kernel(program, "fluid_timestep_3d");
-        cl::displace_fluid = load_kernel(program, "displace_fluid");
-        cl::process_skins = load_kernel(program, "process_skins");
-        cl::draw_hermite_skin = load_kernel(program, "draw_hermite_skin");
-    }*/
+		/*if(!only_3d)
+		{
+			cl::tile_clear = load_kernel(program, "tile_clear");
+			cl::point_cloud_depth = load_kernel(program, "point_cloud_depth_pass");
+			cl::point_cloud_recover = load_kernel(program, "point_cloud_recovery_pass");
+			cl::space_dust = load_kernel(program, "space_dust");
+			cl::space_dust_no_tile = load_kernel(program, "space_dust_no_tiling");
+			cl::draw_ui = load_kernel(program, "draw_ui");
+			cl::draw_hologram = load_kernel(program, "draw_hologram");
+			cl::blit_with_id = load_kernel(program, "blit_with_id");
+			cl::blit_clear = load_kernel(program, "blit_clear");
+			cl::clear_id_buf = load_kernel(program, "clear_id_buf");
+			cl::clear_screen_dbuf = load_kernel(program, "clear_screen_dbuf");
+			cl::draw_voxel_octree = load_kernel(program, "draw_voxel_octree");
+			cl::create_distortion_offset = load_kernel(program, "create_distortion_offset");
+			cl::draw_fancy_projectile = load_kernel(program, "draw_fancy_projectile");
+			cl::reproject_depth = load_kernel(program, "reproject_depth");
+			cl::reproject_screen = load_kernel(program, "reproject_screen");
+			cl::space_nebulae = load_kernel(program, "space_nebulae");
+			cl::edge_smoothing = load_kernel(program, "edge_smoothing");
+			cl::shadowmap_smoothing_x = load_kernel(program, "shadowmap_smoothing_x");
+			cl::shadowmap_smoothing_y = load_kernel(program, "shadowmap_smoothing_y");
+			cl::raytrace = load_kernel(program, "raytrace");
+			cl::render_voxels = load_kernel(program, "render_voxels");
+			cl::render_voxels_tex = load_kernel(program, "render_voxels_tex");
+			cl::render_voxel_cube = load_kernel(program, "render_voxel_cube");
+			cl::diffuse_unstable = load_kernel(program, "diffuse_unstable");
+			cl::diffuse_unstable_tex = load_kernel(program, "diffuse_unstable_tex");
+			cl::advect = load_kernel(program, "advect");
+			cl::advect_tex = load_kernel(program, "advect_tex");
+			cl::post_upscale = load_kernel(program, "post_upscale");
+			cl::warp_oculus = load_kernel(program, "warp_oculus");
+			cl::goo_diffuse = load_kernel(program, "goo_diffuse");
+			cl::goo_advect = load_kernel(program, "goo_advect");
+			cl::fluid_amount = load_kernel(program, "fluid_amount");
+			cl::update_boundary = load_kernel(program, "update_boundary");
+			cl::fluid_initialise_mem = load_kernel(program, "fluid_initialise_mem");
+			cl::fluid_initialise_mem_3d = load_kernel(program, "fluid_initialise_mem_3d");
+			cl::fluid_timestep = load_kernel(program, "fluid_timestep");
+			cl::fluid_timestep_3d = load_kernel(program, "fluid_timestep_3d");
+			cl::displace_fluid = load_kernel(program, "displace_fluid");
+			cl::process_skins = load_kernel(program, "process_skins");
+			cl::draw_hermite_skin = load_kernel(program, "draw_hermite_skin");
+		}*/
 
-    kernel_map.clear();
-    cl::kernels.clear();
+		kernel_map.clear();
+		cl::kernels.clear();
 
-    lg::log("Loaded obscene numbers of kernels");
+		lg::log("Loaded obscene numbers of kernels");
+	}
+	else
+	{
+		lg::log("Could not load the kernel source.");
+	}
 }
 
 inline void oclstuff(const std::string& file, int w, int h, int lres, bool only_3d, const std::string& extra_build_commands)
@@ -348,14 +355,23 @@ inline void oclstuff(const std::string& file, int w, int h, int lres, bool only_
     {
         lg::log("Error getting device ids: ", error);
 
-        print_blacklist_error_info();
-        exit(error);
+	    if (error == CL_DEVICE_NOT_FOUND)
+	    {
+		    num = 0;
+		    lg::log("A valid OpenCL device could not be found (error CL_DEVICE_NOT_FOUND).");
+	    }
+	    else
+	    {
+		    print_blacklist_error_info();
+		    exit(error);
+	    }
     }
     else
     {
-        lg::log("Got device ids");
+	    lg::log("Got device ids");
 	    lg::log("Found ", num, " devices");
     }
+
 
 
     ///I think the context is invalid
