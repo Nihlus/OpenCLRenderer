@@ -23,9 +23,16 @@ texture* texture_context::make_new()
 
 texture* texture_context::make_new_cached(const std::string& loc)
 {
+	std::string cleanPath = loc;
+#if defined(_WIN32)
+	std::replace(cleanPath.begin(), cleanPath.end(), '/', '\\');
+#else
+	std::replace(cleanPath.begin(), cleanPath.end(), '\\', '/');
+#endif
+
     for(auto& i : all_textures)
     {
-        if(i->cacheable && !i->is_unique && i->texture_location == loc)
+        if(i->cacheable && !i->is_unique && i->texture_location == cleanPath)
         {
             #ifdef DEBUGGING
             lg::log("cached texture load");

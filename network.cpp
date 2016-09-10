@@ -1,6 +1,6 @@
 #include "network.hpp"
 
-#if defined(WIN32)
+#if defined(_WIN32)
 #define _WIN32_WINNT 0x601
 #include <ws2tcpip.h>
 #elif defined(__linux__)
@@ -174,7 +174,7 @@ void network::host()
 {
     std::string port = "6950";
 
-#if defined(WIN32)
+#if defined(_WIN32)
     WSADATA wsaData;
 
     if (WSAStartup(MAKEWORD(2,2), &wsaData) != 0)
@@ -214,7 +214,7 @@ void network::host()
 
         if(bind(sockfd, p->ai_addr, p->ai_addrlen) != 0)
         {
-#if defined(WIN32)
+#if defined(_WIN32)
             closesocket(sockfd);
 #elif defined(__linux__)
 			close(sockfd);
@@ -245,7 +245,7 @@ void network::join(std::string ip)
 {
     std::string port = "6950";
 
-#if defined(WIN32)
+#if defined(_WIN32)
 
 	WSADATA wsaData;
 
@@ -488,7 +488,7 @@ std::vector<char> network::receive_any(int& ret_address)
 
     if(len == -1)
     {
-#if defined(WIN32)
+#if defined(_WIN32)
         printf("%i\n", WSAGetLastError());
 #elif defined(__linux__)
 	    printf("&i\n", errno);

@@ -1,6 +1,7 @@
 #include "texture.hpp"
 #include "clstate.h"
 #include <iostream>
+#include <algorithm>
 #include <math.h>
 #include <boost/bind.hpp>
 //#include "texture_manager.hpp"
@@ -127,7 +128,13 @@ void texture::set_texture_location(const std::string& loc)
 
 void texture::set_location(const std::string& loc)
 {
-    texture_location = loc;
+	std::string cleanPath = loc;
+#if defined(_WIN32)
+	std::replace(cleanPath.begin(), cleanPath.end(), '/', '\\');
+#else
+	std::replace(cleanPath.begin(), cleanPath.end(), '\\', '/');
+#endif
+    texture_location = cleanPath;
 }
 
 void texture::set_create_colour(sf::Color col, int w, int h)
@@ -584,7 +591,7 @@ void texture::update_gpu_texture_threshold_split(texture_context_data& gpu_dat, 
 
 void texture_load(texture* tex)
 {
-    tex->c_image.loadFromFile(tex->texture_location);
+	tex->c_image.loadFromFile(tex->texture_location);
     tex->is_loaded = true;
 
     if(tex->get_largest_dimension() > max_tex_size)

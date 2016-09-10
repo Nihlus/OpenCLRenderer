@@ -5,8 +5,9 @@ set(pfix_VERSION_MAJOR 1)
 set(pfix_VERSION_MINOR 0)
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/bin)
+set(CMAKE_BUILD_TYPE Debug)
 
-add_compile_options(-std=gnu++14 -Wno-c++11-narrowing -fexceptions -DCL_USE_DEPRECATED_OPENCL_1_1_APIS)
+add_compile_options(-g -std=gnu++14 -Wno-c++11-narrowing -fexceptions -DCL_USE_DEPRECATED_OPENCL_1_1_APIS -D_GLIBCXX_DEBUG)
 
 set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake_modules" ${CMAKE_MODULE_PATH})
 
@@ -33,6 +34,7 @@ set(PFIX_SOURCES
 		${PROJECT_SOURCE_DIR}/objects_container.cpp
 		${PROJECT_SOURCE_DIR}/ocl.cpp
 		${PROJECT_SOURCE_DIR}/point_cloud.cpp
+		${PROJECT_SOURCE_DIR}/settings_loader.cpp
 		${PROJECT_SOURCE_DIR}/text_handler.cpp
 		${PROJECT_SOURCE_DIR}/texture.cpp
 		${PROJECT_SOURCE_DIR}/texture_context.cpp
@@ -57,6 +59,7 @@ set(PFIX_HEADERS
 		${PROJECT_SOURCE_DIR}/objects_container.hpp
 		${PROJECT_SOURCE_DIR}/ocl.h
 		${PROJECT_SOURCE_DIR}/point_cloud.hpp
+		${PROJECT_SOURCE_DIR}/settings_loader.hpp
 		${PROJECT_SOURCE_DIR}/proj.hpp
 		${PROJECT_SOURCE_DIR}/text_handler.hpp
 		${PROJECT_SOURCE_DIR}/texture.hpp

@@ -27,7 +27,9 @@ std::string retrieve_diffuse_new(const std::vector<std::string>& file, const std
         }
         if(found && strncmp(file[i].c_str(), "map_Kd ", 7)==0)
         {
-            return file[i].substr(file[i].find_last_of(' ')+1, std::string::npos);
+	        ulong start_pos = file[i].find_last_of(' ') + 1;
+	        ulong path_len = file[i].length() - start_pos - 1;
+            return file[i].substr(start_pos, path_len);
         }
     }
 
@@ -48,7 +50,9 @@ std::string retrieve_bumpmap(const std::vector<std::string>& file, const std::st
         }
         if(found && strncmp(file[i].c_str(), "map_Bump ", 9)==0)
         {
-            return file[i].substr(file[i].find_last_of(' ')+1, std::string::npos);
+	        ulong start_pos = file[i].find_last_of(' ') + 1;
+	        ulong path_len = file[i].length() - start_pos - 1;
+	        return file[i].substr(start_pos, path_len);
         }
         if(found && strncmp(file[i].c_str(), "newmtl ", 7)==0)
         {

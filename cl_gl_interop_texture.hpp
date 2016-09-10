@@ -6,7 +6,7 @@
 #include <GL/glew.h>
 #include <vector>
 
-#if defined(WIN32)
+#if defined(_WIN32)
 #include <windows.h>
 #endif
 
@@ -159,7 +159,7 @@ struct cl_gl_interop_texture
 
     void gl_blit(GLuint target, GLuint source)
     {
-#if defined(WIN32)
+#if defined(_WIN32)
         PFNGLBINDFRAMEBUFFEREXTPROC glBindFramebufferEXT = (PFNGLBINDFRAMEBUFFEREXTPROC)wglGetProcAddress("glBindFramebufferEXT");
         PFNGLBLITFRAMEBUFFEREXTPROC glBlitFramebufferEXT = (PFNGLBLITFRAMEBUFFEREXTPROC)wglGetProcAddress("glBlitFramebufferEXT");
 #elif defined(__linux__)
@@ -209,7 +209,7 @@ struct cl_gl_interop_texture
 
     void init_gl(compute::command_queue cqueue)
     {
-#if defined(WIN32)
+#if defined(_WIN32)
 		    PFNGLGENFRAMEBUFFERSEXTPROC glGenFramebuffersEXT = (PFNGLGENFRAMEBUFFERSEXTPROC)wglGetProcAddress("glGenFramebuffersEXT");
 	        PFNGLBINDFRAMEBUFFEREXTPROC glBindFramebufferEXT = (PFNGLBINDFRAMEBUFFEREXTPROC)wglGetProcAddress("glBindFramebufferEXT");
 	        PFNGLGENRENDERBUFFERSEXTPROC glGenRenderbuffersEXT = (PFNGLGENRENDERBUFFERSEXTPROC)wglGetProcAddress("glGenRenderbuffersEXT");
