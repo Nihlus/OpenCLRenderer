@@ -1,14 +1,10 @@
 #include "ui_manager.hpp"
 #include "hologram.hpp"
-#include <boost/compute/source.hpp>
 #include <boost/compute/system.hpp>
 #include <boost/compute/algorithm/iota.hpp>
 #include <boost/compute/interop/opengl.hpp>
-#include <SFML/Graphics.hpp>
 #include "clstate.h"
 #include "engine.hpp"
-#include <map>
-#include "vec.hpp"
 #include "proj.hpp"
 
 namespace compute = boost::compute;

@@ -1,6 +1,5 @@
 #include "texture.hpp"
 #include "objects_container.hpp"
-#include <iostream>
 #include "obj_load.hpp"
 #include "vec.hpp"
 #include "logging.hpp"

@@ -34,7 +34,8 @@ int main(int argc, char *argv[])
     object_context context;
 
     auto sponza = context.make_new();
-    sponza->set_file("sp2/sp2.obj");
+    //sponza->set_file("sp2/sp2.obj");
+	sponza->set_file("objects/square.obj");
     sponza->set_active(true);
     //sponza->cache = false;
 

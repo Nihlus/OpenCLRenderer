@@ -1,11 +1,8 @@
 #include "texture.hpp"
 #include "object.hpp"
-#include "clstate.h"
 #include "objects_container.hpp"
-#include <iostream>
 #include "vec.hpp"
 #include "logging.hpp"
-#include <cstddef>
 
 cl_uint object::gid = 0;
 

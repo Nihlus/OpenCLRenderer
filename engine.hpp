@@ -12,8 +12,6 @@
 #include "clstate.h"
 #include "SVO/voxel.h"
 
-
-
 #include <initializer_list>
 #include <unordered_map>
 

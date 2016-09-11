@@ -1,28 +1,11 @@
 #include <GL/glew.h>
-#include <GL/gl.h>
 #include "engine.hpp"
-#include <math.h>
-
-#include <GL/glext.h>
-
-
-#include "clstate.h"
-#include <iostream>
-#include <GL/gl.h>
-//#include "obj_mem_manager.hpp"
-#include <stdio.h>
-#include <limits.h>
-//#include "texture_manager.hpp"
-#include "interact_manager.hpp"
-#include "text_handler.hpp"
-#include "point_cloud.hpp"
-//#include "hologram.hpp"
 #include "vec.hpp"
+
+//#include "obj_mem_manager.hpp"
+//#include "texture_manager.hpp"
+//#include "hologram.hpp"
 //#include "ui_manager.hpp"
-#include <chrono>
-#include "ocl.h"
-#include "controls.hpp"
-#include "logging.hpp"
 
 #ifdef RIFT
 #include "Rift/Include/OVR.h"
@@ -32,8 +15,6 @@
 #endif
 
 #define FOV_CONST 500.0f
-
-#include "cl_gl_interop_texture.hpp"
 
 bool rift::enabled = false;
 
@@ -1117,8 +1098,6 @@ void render_async_reproject(cl_event event, cl_int event_command_exec_status, vo
 
     eng.current_frametype = frametype::REPROJECT;
 }
-
-#include "light.hpp"
 
 compute::event engine::draw_godrays(object_context_data& dat)
 {

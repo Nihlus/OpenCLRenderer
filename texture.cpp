@@ -1,12 +1,7 @@
 #include "texture.hpp"
-#include "clstate.h"
 #include <iostream>
-#include <algorithm>
-#include <math.h>
-#include <boost/bind.hpp>
 //#include "texture_manager.hpp"
 #include "engine.hpp"
-#include "texture_context.hpp"
 
 template<typename T>
 static std::string to_str(T i)

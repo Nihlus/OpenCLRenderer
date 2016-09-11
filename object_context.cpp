@@ -1,7 +1,6 @@
 #include "engine.hpp"
-#include "object_context.hpp"
-#include "objects_container.hpp"
 #include "texture.hpp"
+#include "object_context.hpp"
 
 std::map<std::string, objects_container> object_cache;
 
@@ -282,8 +281,6 @@ static int generate_gpu_object_descriptor(texture_context& tex_ctx, const std::v
     return triangle_count;
 }
 
-#include "clstate.h"
-
 ///ok, so we need to know if we've got to force a build
 ///so make this return a vector of events, that we wait on
 ///so, reallocating seems to leak a little bit of gpu memory somewehere
@@ -359,9 +356,11 @@ std::vector<compute::event> alloc_gpu(int mip_start, cl_uint tri_num, object_con
             {
                 ///this is the bottleneck
                 if(tri_size < arbitrary_small_bound)
-                for(int i=0; i<(*it).tri_num; i++)
                 {
-                    (*it).tri_list[i].vertices[0].set_pad(obj_id);
+	                for(int i=0; i<(*it).tri_num; i++)
+	                {
+		                (*it).tri_list[i].vertices[0].set_pad(obj_id);
+	                }
                 }
 
                 event = cl::cqueue2.enqueue_write_buffer_async(dat.g_tri_mem, sizeof(triangle)*running, sizeof(triangle)*(*it).tri_list.size(), (*it).tri_list.data());

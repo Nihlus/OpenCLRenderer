@@ -1,15 +1,5 @@
 #include "texture.hpp"
 #include "obj_load.hpp"
-#include <cstdio>
-#include <cstdlib>
-#include <vector>
-#include <iostream>
-#include <fstream>
-#include <cstdio>
-#include <string.h>
-#include "triangle.hpp"
-#include <math.h>
-#include <list>
 #include "vec.hpp"
 #include "logging.hpp"
 
@@ -27,9 +17,13 @@ std::string retrieve_diffuse_new(const std::vector<std::string>& file, const std
         }
         if(found && strncmp(file[i].c_str(), "map_Kd ", 7)==0)
         {
+	        std::string texture_path = file[i];
+	        texture_path.erase(std::remove(texture_path.begin(), texture_path.end(), '\r'), texture_path.end());
+
 	        ulong start_pos = file[i].find_last_of(' ') + 1;
-	        ulong path_len = file[i].length() - start_pos - 1;
-            return file[i].substr(start_pos, path_len);
+	        ulong path_len = file[i].length() - start_pos;
+
+            return texture_path.substr(start_pos, path_len);
         }
     }
 
@@ -50,9 +44,13 @@ std::string retrieve_bumpmap(const std::vector<std::string>& file, const std::st
         }
         if(found && strncmp(file[i].c_str(), "map_Bump ", 9)==0)
         {
+	        std::string texture_path = file[i];
+	        texture_path.erase(std::remove(texture_path.begin(), texture_path.end(), '\r'), texture_path.end());
+
 	        ulong start_pos = file[i].find_last_of(' ') + 1;
-	        ulong path_len = file[i].length() - start_pos - 1;
-	        return file[i].substr(start_pos, path_len);
+	        ulong path_len = file[i].length() - start_pos;
+
+	        return texture_path.substr(start_pos, path_len);
         }
         if(found && strncmp(file[i].c_str(), "newmtl ", 7)==0)
         {
@@ -641,8 +639,6 @@ void obj_polygon(objects_container* pobj, texture& tex, struct triangle (*f)(int
 
     pobj->isloaded = true;
 }
-
-#include <vec/vec.hpp>
 
 std::vector<triangle> subdivide_tris(const std::vector<triangle>& in)
 {

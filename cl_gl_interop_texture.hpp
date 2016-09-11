@@ -6,10 +6,6 @@
 #include <GL/glew.h>
 #include <vector>
 
-#if defined(_WIN32)
-#include <windows.h>
-#endif
-
 #include "clstate.h"
 #include <atomic>
 

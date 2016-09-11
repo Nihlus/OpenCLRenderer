@@ -1,5 +1,4 @@
 #include "hologram.hpp"
-#include <SFML/Graphics.hpp>
 #include <iostream>
 #include "clstate.h"
 #include "engine.hpp"

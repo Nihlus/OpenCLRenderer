@@ -1,7 +1,6 @@
 #include <SFML/Graphics.hpp>
 #include "interact_manager.hpp"
 #include "engine.hpp"
-#include <utility>
 
 bool interact::is_loaded = false;
 sf::Image interact::pixel;
