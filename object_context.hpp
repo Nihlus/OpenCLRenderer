@@ -21,10 +21,54 @@ struct obj_g_descriptor;
 
 extern std::map<std::string, objects_container> object_cache;
 
+template<typename T, int N>
+struct n_buffer
+{
+    T buffers[N];
+
+    int c = 0;
+
+    void flip()
+    {
+        c++;
+        c = c % N;
+    }
+
+    T& operator[](std::size_t idx)
+    {
+        ///0 is always the front buffer, 1 is always the next
+        return buffers[(idx + c) % N];
+    }
+
+    const T& operator[](std::size_t idx) const
+    {
+        return buffers[(idx + c) % N];
+    }
+
+    n_buffer& operator=(const n_buffer& other)
+    {
+        if(this == &other)
+            return *this;
+
+        for(int i=0; i<N; i++)
+        {
+            buffers[i] = other.buffers[i];
+        }
+
+        c = other.c;
+
+        return *this;
+    }
+};
+
 struct object_context_data
 {
     cl_uint tri_num;
     cl_uint obj_num;
+    cl_uint frame_id = 0; ///increase monotonically
+
+    cl_float4 c_pos_old{{0}};
+    cl_float4 c_rot_old{{0}};
 
     compute::buffer g_tri_mem;
     compute::buffer g_tri_num;
@@ -45,16 +89,17 @@ struct object_context_data
     compute::buffer g_tid_buf_atomic_count;
     compute::buffer g_tid_lightbuf_atomic_count;
 
-    cl_gl_interop_texture gl_screen;
-    //compute::opengl_renderbuffer g_screen;
-    compute::buffer depth_buffer[2];
+    n_buffer<cl_gl_interop_texture, 2> gl_screen;
+    n_buffer<compute::buffer, 2> depth_buffer;
+
     compute::image2d g_id_screen_tex;
 
     cl_float4 g_clear_col = (cl_float4){0};
 
     cl_uint* cpu_id_num = nullptr;
 
-    int nbuf = 0;
+    //int dbuf = 0;
+    //int sbuf = 0;
 
     /*compute::buffer pos[3];
     compute::buffer vt[3];
@@ -81,7 +126,7 @@ struct object_context_data
     bool has_valid_texture_data = false;
 
     void ensure_screen_buffers(int _w, int _h, bool force = false);
-    void swap_depth_buffers();
+    void swap_buffers();
 };
 
 struct object_temporaries

@@ -371,8 +371,6 @@ compute::event texture::update_internal(cl_mem mem, texture_context_data& gpu_da
     if(acquire)
         clEnqueueReleaseGLObjects(cqueue.get(), 1, &mem, 0, nullptr, &clevent);
 
-    //clReleaseMemObject(mem);
-
     if(acquire)
         return compute::event(clevent);
     else
@@ -404,6 +402,8 @@ compute::event texture::update_gpu_texture(const sf::Texture& tex, texture_conte
 	cl_mem gl_mem = clCreateFromGLTexture(cl::context.get(), CL_MEM_READ_ONLY,
 	                                      GL_TEXTURE_2D, 0, (GLuint)opengl_id, &err);
 
+
+
     if(err != CL_SUCCESS)
     {
         lg::log("Error in clcreatefromgltexture in update_gpu_texture ", err);
@@ -411,8 +411,9 @@ compute::event texture::update_gpu_texture(const sf::Texture& tex, texture_conte
     }
 
     auto event = update_internal(gl_mem, gpu_dat, flip, cqueue, true);
-	clReleaseMemObject(gl_mem);
-	return event;
+    clReleaseMemObject(gl_mem);
+
+    return event;
 }
 
 compute::event texture::update_gpu_texture_nogl(compute::image2d buf, texture_context_data& gpu_dat, cl_int flip, compute::command_queue cqueue, std::vector<compute::event> events)

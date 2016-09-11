@@ -5,9 +5,14 @@
 
 std::map<std::string, objects_container> object_cache;
 
-void object_context_data::swap_depth_buffers()
+void object_context_data::swap_buffers()
 {
-    nbuf = (nbuf + 1) % 2;
+    //nbuf = (nbuf + 1) % 2;
+    //gl_screen.flip(); ///if we flip, bad things can happen with cl/gl interaction
+    depth_buffer.flip();
+
+    c_pos_old = engine::c_pos;
+    c_rot_old = engine::c_rot;
 }
 
 void object_context_data::ensure_screen_buffers(int _w, int _h, bool force)
@@ -25,7 +30,8 @@ void object_context_data::ensure_screen_buffers(int _w, int _h, bool force)
 
         //g_screen = engine::gen_cl_gl_framebuffer_renderbuffer(&gl_framebuffer_id, _w, _h);
 
-        gl_screen.init(_w, _h, use_gl_interop(), cl::cqueue);
+        gl_screen[0].init(_w, _h, use_gl_interop(), cl::cqueue);
+        gl_screen[1].init(_w, _h, use_gl_interop(), cl::cqueue);
 
         lg::log("Created g_screen in ensure_screen_buffers");
 
@@ -244,6 +250,12 @@ static int generate_gpu_object_descriptor(texture_context& tex_ctx, const std::v
             desc.world_pos = it.pos;
             desc.world_rot = it.rot;
             desc.world_rot_quat = conv_implicit<cl_float4, quat>(it.rot_quat);
+
+            desc.old_world_pos_1 = desc.world_pos;
+            desc.old_world_pos_2 = desc.world_pos;
+            desc.old_world_rot_quat_1 = desc.world_rot_quat;
+            desc.old_world_rot_quat_2 = desc.world_rot_quat;
+
             desc.scale = it.dynamic_scale;
             desc.has_bump = it.has_bump;
             desc.specular = it.specular;
@@ -393,7 +405,7 @@ std::vector<compute::event> alloc_object_descriptors(const std::vector<obj_g_des
 
     dat.obj_num = object_descriptors.size();
 
-    dat.g_obj_desc = compute::buffer(cl::context, sizeof(obj_g_descriptor)*dat.obj_num, CL_MEM_READ_ONLY);
+    dat.g_obj_desc = compute::buffer(cl::context, sizeof(obj_g_descriptor)*dat.obj_num, CL_MEM_READ_WRITE);
     dat.g_obj_num = compute::buffer(cl::context, sizeof(cl_uint), CL_MEM_READ_ONLY);
 
     ///dont care if data arrives late
@@ -478,18 +490,18 @@ void flip_buffers(object_context* ctx)
     }
 
     ctx->new_gpu_dat.g_id_screen_tex = ctx->fetch()->g_id_screen_tex;
-    ctx->new_gpu_dat.gl_screen = ctx->fetch()->gl_screen;
-    ctx->new_gpu_dat.gl_framebuffer_id = ctx->fetch()->gl_framebuffer_id;
-    ctx->new_gpu_dat.nbuf = (ctx->fetch()->nbuf) % 2;
-    ctx->new_gpu_dat.g_clear_col = ctx->gpu_dat.g_clear_col;
 
-    ///wait. In doing this, we're... well, sharing the old one's actual stored resource
-    ///I smell a fuckup
-    for(int i=0; i<2; i++)
-    {
-        ctx->new_gpu_dat.depth_buffer[i] = ctx->fetch()->depth_buffer[i];
-        //ctx->new_gpu_dat.ensure_screen_buffers(ctx->gpu_dat.s_w, ctx->gpu_dat.s_h, true);
-    }
+    //ctx->new_gpu_dat.gl_screen[0] = ctx->fetch()->gl_screen[0];
+    //ctx->new_gpu_dat.gl_screen[1] = ctx->fetch()->gl_screen[1];
+
+    ctx->new_gpu_dat.gl_screen = ctx->fetch()->gl_screen;
+
+    ctx->new_gpu_dat.gl_framebuffer_id = ctx->fetch()->gl_framebuffer_id;
+
+    ctx->new_gpu_dat.g_clear_col = ctx->gpu_dat.g_clear_col;
+    ctx->new_gpu_dat.frame_id = ctx->gpu_dat.frame_id;
+
+    ctx->new_gpu_dat.depth_buffer = ctx->fetch()->depth_buffer;
 
     if(!ctx->new_gpu_dat.has_valid_texture_data)
     {
@@ -741,8 +753,11 @@ void object_context::flush_locations(bool force)
 
     if(force && containers.size() > 0)
     {
+        ///this doesnt do what i want it to do
         clEnqueueBarrier(cl::cqueue);
     }
+
+    cl::cqueue_ooo.flush();
 }
 
 void object_context::flip()
