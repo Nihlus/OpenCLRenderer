@@ -298,11 +298,13 @@ texture_context_data texture_context::alloc_gpu(object_context& ctx)
 
     std::vector<texture_id_t> texture_order;
 
-    for(auto& i : ctx.containers)
+    for(objects_container*& i : ctx.containers)
     {
-        for(auto& o : i->objs)
+	    for(int j = 0; j < i->objs.size(); j++)
+        //for(object& o : i->objs)
         {
-            textures_in_use.insert(o.tid);
+	        object& o = i->objs[j];
+	        textures_in_use.insert(o.tid);
 
             if(o.rid != -1)
                 textures_in_use.insert(o.rid);

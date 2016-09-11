@@ -153,8 +153,8 @@ cl_int oclGetPlatformID(cl_platform_id* clSelectedPlatformID)
             if(*clSelectedPlatformID == NULL)
             {
                 //printf("selected platform: %d\n", num_platforms-1);
-                lg::log("selected platform ", num_platforms-1);
-                *clSelectedPlatformID = clPlatformIDs[num_platforms-1];
+                lg::log("selected platform ", 0);
+                *clSelectedPlatformID = clPlatformIDs[0];
             }
 
             free(clPlatformIDs);

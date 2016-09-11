@@ -612,7 +612,7 @@ compute::event run_kernel_with_string(const std::string& name, cl_uint global_ws
         #endif
     }
 
-    auto ev = run_kernel_with_list(k, global_ws, local_ws, dimensions, argv, true, cqueue, did_load, events);
+    compute::event ev = run_kernel_with_list(k, global_ws, local_ws, dimensions, argv, true, cqueue, did_load, events);
 
     if(did_load)
     {
