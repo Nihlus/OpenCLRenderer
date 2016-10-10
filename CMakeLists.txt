@@ -7,6 +7,8 @@ set(pfix_VERSION_MINOR 0)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/bin)
 set(CMAKE_BUILD_TYPE Debug)
 
+set(EXTERNAL_PROJECTS_PATH "${PROJECT_SOURCE_DIR}/lib")
+
 add_compile_options(-g -std=gnu++14 -Wno-c++11-narrowing -fexceptions -DCL_USE_DEPRECATED_OPENCL_1_1_APIS -D_GLIBCXX_DEBUG)
 
 set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake_modules" ${CMAKE_MODULE_PATH})
@@ -70,12 +72,12 @@ set(PFIX_HEADERS
 		${PROJECT_SOURCE_DIR}/vertex.hpp)
 
 include_directories(
-		${OPENGL_INCLUDE_DIR}
-		${OpenCL_INCLUDE_DIR}
-		${SFML_INCLUDE_DIR}
-		${PROJECT_SOURCE_DIR}/../libraries
-		${PROJECT_SOURCE_DIR}/../libraries/half
-		${PROJECT_SOURCE_DIR}/../libraries/compute/include)
+		${OPENGL_INCLUDE_DIR}/
+		${OpenCL_INCLUDE_DIR}/
+		${SFML_INCLUDE_DIR}/
+		${EXTERNAL_PROJECTS_PATH}/
+		${EXTERNAL_PROJECTS_PATH}/half/include
+		${EXTERNAL_PROJECTS_PATH}/compute/include)
 
 add_executable(pfix ${PFIX_SOURCES} ${PFIX_HEADERS})
 

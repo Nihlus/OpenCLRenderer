@@ -2,7 +2,7 @@
 #include <math.h>
 #include "vec.hpp"
 #include <vec/vec.hpp>
-#include <half/half.hpp>
+#include <half.hpp>
 
 ///http://aras-p.info/texts/CompactNormalStorage.html
 /*half4 encode (half3 n, float3 view)

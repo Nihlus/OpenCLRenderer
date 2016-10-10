@@ -1,0 +1,9 @@
+[submodule "lib/compute"]
+	path = lib/compute
+	url = https://github.com/boostorg/compute.git
+[submodule "lib/half"]
+	path = lib/half
+	url = git@github.com:Nihlus/half.git
+[submodule "lib/vec"]
+	path = lib/vec
+	url = git@github.com:Nihlus/funvectormaths.git
