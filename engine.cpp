@@ -2873,6 +2873,7 @@ void engine::render_texture(compute::opengl_renderbuffer& buf, GLuint id, int w,
     glBindFramebufferEXT(GL_READ_FRAMEBUFFER, id);
 
     glBindFramebufferEXT(GL_DRAW_FRAMEBUFFER, 0);
+	glDrawBuffer(GL_BACK);
 
     ///blit buffer to screen
     glBlitFramebufferEXT(0 , 0, w, h, 0, 0, width, height, GL_COLOR_BUFFER_BIT, GL_LINEAR);
@@ -3099,6 +3100,7 @@ void render_screen(engine& eng, object_context_data& dat)
 
         ///If this isn't here, it doesn't work. I literally dont understand why
         glBindFramebufferEXT(GL_DRAW_FRAMEBUFFER, 0);
+	    glDrawBuffer(GL_BACK);
 
         eng.window.draw(spr);
     }

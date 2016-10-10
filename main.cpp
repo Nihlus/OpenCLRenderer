@@ -197,9 +197,9 @@ int main(int argc, char *argv[])
             event = window.draw_bulk_objs_n(*context.fetch());
             //event = window.draw_tiled_deferred(*context.fetch());
 
-            event = window.do_pseudo_aa();
+            //event = window.do_pseudo_aa();
 
-            event = window.do_motion_blur(*context.fetch(), 1.f, 1.f);
+            //event = window.do_motion_blur(*context.fetch(), 1.f, 1.f);
 
             //event = window.draw_godrays(*context.fetch());
 
