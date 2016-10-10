@@ -189,7 +189,7 @@ int main(int argc, char *argv[])
 
         compute::event event;
 
-        //if(window.can_render())
+        if(window.can_render())
         {
             window.generate_realtime_shadowing(*context.fetch());
             ///do manual async on thread
