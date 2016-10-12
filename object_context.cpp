@@ -374,25 +374,20 @@ std::vector<compute::event> alloc_gpu(int mip_start, cl_uint tri_num, object_con
 
                 event = cl::cqueue2.enqueue_write_buffer_async(dat.g_tri_mem, sizeof(triangle)*running, sizeof(triangle)*(*it).tri_list.size(), (*it).tri_list.data());
 
+                if(tri_size < arbitrary_small_bound)
                 events.push_back(event);
 
                 if(tri_size >= arbitrary_small_bound)
                 {
-                    cl_event ev = events.back().get();
-
-                    clEnqueueBarrierWithWaitList(cl::cqueue2.get(), 1, &ev, nullptr);
-
                     arg_list fargs;
                     fargs.push_back(&dat.g_tri_mem);
                     fargs.push_back(&obj_id);
                     fargs.push_back(&running);
                     fargs.push_back(&tri_size);
 
-                    run_kernel_with_string("fill_ids", {tri_size}, {256}, 1, fargs, cl::cqueue2);
+                    auto event2 = run_kernel_with_string("fill_ids", {tri_size}, {256}, 1, fargs, cl::cqueue2, {event});
 
-                    compute::event ev2 = compute::event(ev, true);
-
-                    events.push_back(ev2);
+                    events.push_back(event2);
                 }
             }
 
@@ -637,7 +632,9 @@ void object_context::build(bool force, bool async)
     sf::Clock agpu;
     auto gpu_alloc_events = alloc_gpu(tex_ctx.mipmap_start, tri_num, *this, new_gpu_dat, force);
 
-    printf("agpu time %f\n", agpu.getElapsedTime().asMicroseconds()/1000.f);
+    //cl::cqueue2.finish();
+
+    //printf("agpu time %f\n", agpu.getElapsedTime().asMicroseconds()/1000.f);
 
     ///start debugging from here
 
@@ -742,11 +739,6 @@ object_context_data* object_context::fetch()
     return &gpu_dat;
 }
 
-object_context_data* object_context::get_current_gpu()
-{
-    return &gpu_dat;
-}
-
 void object_context::set_clear_colour(const cl_float4& col)
 {
     gpu_dat.g_clear_col = col;
@@ -756,7 +748,7 @@ void object_context::flush_locations(bool force)
 {
     for(auto& i : containers)
     {
-        i->g_flush_objects(gpu_dat, force);
+        i->g_flush_objects(*this, force);
     }
 
     if(force && containers.size() > 0)
