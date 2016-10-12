@@ -1,6 +1,7 @@
 #include "cl_gl_interop_texture.hpp"
 
 ///in a separate file because this is getting modified every 5 seconds
+/*
 void cl_gl_interop_texture::cl_blit_to_opengl(GLuint target, compute::command_queue cqueue, bool allow_tick)
 {
 #if defined(_WIN32)
@@ -28,7 +29,7 @@ void cl_gl_interop_texture::cl_blit_to_opengl(GLuint target, compute::command_qu
         ///I think the reason why we cant do the below
         ///is that sfml textures are probably not a framebuffer
         ///although the rendertextures probably *are*
-        /*sf::Sprite spr;
+        / *sf::Sprite spr;
         spr.setTexture(sfml_nogl_tex);
 
         sfml_nogl.draw(spr);
@@ -38,7 +39,7 @@ void cl_gl_interop_texture::cl_blit_to_opengl(GLuint target, compute::command_qu
 
         glBindFramebufferEXT(GL_DRAW_FRAMEBUFFER, 0);
 
-        glBlitFramebufferEXT(0, 0, w, h, 0, 0, w, h, GL_COLOR_BUFFER_BIT, GL_NEAREST);*/
+        glBlitFramebufferEXT(0, 0, w, h, 0, 0, w, h, GL_COLOR_BUFFER_BIT, GL_NEAREST);* /
     }
 
     flip_no_gl_buffer();
@@ -70,3 +71,4 @@ void cl_gl_interop_texture::cl_blit_to_opengl(GLuint target, compute::command_qu
     need_event = 1;
     ev = compute::event(read_event, false);
 }
+*/

@@ -2,7 +2,7 @@
 #define CAMERA_EFFECTS_HPP_INCLUDED
 
 #include <vec/vec.hpp>
-#include <cl/cl.h>
+#include <CL/cl.h>
 
 struct camera_effect
 {

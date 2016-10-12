@@ -20,6 +20,7 @@ find_package(Threads)
 find_package(SFML 2 REQUIRED system window graphics)
 
 set(PFIX_SOURCES
+		${PROJECT_SOURCE_DIR}/camera_effects.cpp
 		${PROJECT_SOURCE_DIR}/cl_gl_interop_texture.cpp
 		${PROJECT_SOURCE_DIR}/clstate.cpp
 		${PROJECT_SOURCE_DIR}/controls.cpp
@@ -36,6 +37,7 @@ set(PFIX_SOURCES
 		${PROJECT_SOURCE_DIR}/objects_container.cpp
 		${PROJECT_SOURCE_DIR}/ocl.cpp
 		${PROJECT_SOURCE_DIR}/point_cloud.cpp
+		${PROJECT_SOURCE_DIR}/projectile_buffer_gen.cpp
 		${PROJECT_SOURCE_DIR}/settings_loader.cpp
 		${PROJECT_SOURCE_DIR}/smoke.cpp
 		${PROJECT_SOURCE_DIR}/text_handler.cpp
@@ -46,6 +48,7 @@ set(PFIX_SOURCES
 		${PROJECT_SOURCE_DIR}/vertex.cpp)
 
 set(PFIX_HEADERS
+		${PROJECT_SOURCE_DIR}/camera_effects.hpp
 		${PROJECT_SOURCE_DIR}/cl_gl_interop_texture.hpp
 		${PROJECT_SOURCE_DIR}/clstate.h
 		${PROJECT_SOURCE_DIR}/controls.hpp
@@ -65,6 +68,7 @@ set(PFIX_HEADERS
 		${PROJECT_SOURCE_DIR}/settings_loader.hpp
 		${PROJECT_SOURCE_DIR}/smoke.hpp
 		${PROJECT_SOURCE_DIR}/proj.hpp
+		${PROJECT_SOURCE_DIR}/projectile_buffer_gen.hpp
 		${PROJECT_SOURCE_DIR}/text_handler.hpp
 		${PROJECT_SOURCE_DIR}/texture.hpp
 		${PROJECT_SOURCE_DIR}/texture_context.hpp
