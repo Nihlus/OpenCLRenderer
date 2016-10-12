@@ -387,13 +387,13 @@ inline void oclstuff(const std::string& file, int w, int h, int lres, bool only_
 
 ///this is essentially black magic
 	cl_context_properties props[] = {
-#if defined(__linux__)
-			//CL_GL_CONTEXT_KHR, (cl_context_properties) glXGetCurrentContext(),
-			//CL_GLX_DISPLAY_KHR, (cl_context_properties) glXGetCurrentDisplay(),
-#elif defined(_WIN32)
-			CL_GL_CONTEXT_KHR, (cl_context_properties) wglGetCurrentContext(),
-	        CL_WGL_HDC_KHR, (cl_context_properties) wglGetCurrentDC(),
-#endif
+			#if defined(__linux__)
+				CL_GL_CONTEXT_KHR, (cl_context_properties) glXGetCurrentContext(),
+				CL_GLX_DISPLAY_KHR, (cl_context_properties) glXGetCurrentDisplay(),
+			#elif defined(_WIN32)
+				CL_GL_CONTEXT_KHR, (cl_context_properties) wglGetCurrentContext(),
+		        CL_WGL_HDC_KHR, (cl_context_properties) wglGetCurrentDC(),
+			#endif
 			CL_CONTEXT_PLATFORM, (cl_context_properties) platform,
 			0
 	};
