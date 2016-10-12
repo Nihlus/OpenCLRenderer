@@ -1,7 +1,5 @@
-#include "smoke.hpp"
-#include "clstate.h"
-
 #include "engine.hpp"
+#include "smoke.hpp"
 #include "vec.hpp"
 
 ///scrap this macro, its causing issues

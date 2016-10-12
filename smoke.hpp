@@ -1,8 +1,7 @@
 #pragma once
 
-#include <GL/glew.h>
-
 ///start moving away from proj.hpp for non self-project includes and base
+#include <GL/glew.h>
 #include <boost/compute/source.hpp>
 #include <boost/compute/system.hpp>
 #include <boost/compute/algorithm/iota.hpp>

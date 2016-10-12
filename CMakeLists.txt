@@ -37,6 +37,7 @@ set(PFIX_SOURCES
 		${PROJECT_SOURCE_DIR}/ocl.cpp
 		${PROJECT_SOURCE_DIR}/point_cloud.cpp
 		${PROJECT_SOURCE_DIR}/settings_loader.cpp
+		${PROJECT_SOURCE_DIR}/smoke.cpp
 		${PROJECT_SOURCE_DIR}/text_handler.cpp
 		${PROJECT_SOURCE_DIR}/texture.cpp
 		${PROJECT_SOURCE_DIR}/texture_context.cpp
@@ -62,6 +63,7 @@ set(PFIX_HEADERS
 		${PROJECT_SOURCE_DIR}/ocl.h
 		${PROJECT_SOURCE_DIR}/point_cloud.hpp
 		${PROJECT_SOURCE_DIR}/settings_loader.hpp
+		${PROJECT_SOURCE_DIR}/smoke.hpp
 		${PROJECT_SOURCE_DIR}/proj.hpp
 		${PROJECT_SOURCE_DIR}/text_handler.hpp
 		${PROJECT_SOURCE_DIR}/texture.hpp
